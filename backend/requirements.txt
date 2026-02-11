@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+pydantic
+python-multipart
+sentence-transformers
+faiss-cpu
+numpy
+scikit-learn
+groq
+slowapi
+tenacity
+httpx
+python-dotenv

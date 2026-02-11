@@ -1,0 +1,47 @@
+{
+  "title": "ITIL (Information Technology Infrastructure Library)",
+  "description": "A framework of best practices for delivering IT services that align with business needs, focusing on service strategy, design, transition, operation, and continual improvement.",
+  "key_practices": [
+    "Service Strategy and Design",
+    "Service Transition and Operation",
+    "Continual Service Improvement",
+    "Incident Management",
+    "Problem Management",
+    "Change Management",
+    "Service Level Management"
+  ],
+  "roles_involved": [
+    "Service Manager",
+    "IT Service Desk",
+    "Incident Manager",
+    "Problem Manager",
+    "Change Manager",
+    "Service Level Manager",
+    "IT Operations Staff"
+  ],
+  "deliverables": [
+    "Service Catalog",
+    "Service Level Agreements (SLAs)",
+    "Incident Reports",
+    "Problem Records",
+    "Change Requests",
+    "Service Portfolio",
+    "Continual Improvement Plans"
+  ],
+  "common_risks": [
+    "Service level breaches",
+    "Incident resolution delays",
+    "Change management failures",
+    "Poor customer satisfaction",
+    "Knowledge management gaps",
+    "Resource allocation issues"
+  ],
+  "best_practices": [
+    "Define clear service level objectives",
+    "Implement robust incident categorization",
+    "Maintain comprehensive knowledge base",
+    "Regular service reviews and assessments",
+    "Automate routine service operations",
+    "Focus on proactive problem management"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "title": "Agile Methodology",
+  "description": "An iterative approach to project management and software development that helps teams deliver value to their customers faster and with fewer headaches through incremental work cycles.",
+  "key_practices": [
+    "Sprint planning and execution",
+    "Daily stand-up meetings",
+    "Sprint reviews and retrospectives",
+    "Backlog grooming and prioritization",
+    "Continuous integration and delivery",
+    "User story mapping"
+  ],
+  "roles_involved": [
+    "Product Owner",
+    "Scrum Master",
+    "Development Team",
+    "Stakeholders",
+    "Agile Coach",
+    "Business Analyst"
+  ],
+  "deliverables": [
+    "Product Backlog",
+    "Sprint Backlog",
+    "User Stories",
+    "Burndown Charts",
+    "Sprint Review Reports",
+    "Retrospective Action Items",
+    "Increment of Working Software"
+  ],
+  "common_risks": [
+    "Scope creep through uncontrolled backlog changes",
+    "Team burnout from aggressive sprint cycles",
+    "Inadequate documentation",
+    "Stakeholder misalignment",
+    "Technical debt from rapid iterations",
+    "Poor estimation accuracy"
+  ],
+  "best_practices": [
+    "Maintain consistent sprint duration",
+    "Keep user stories small and testable",
+    "Implement automated testing",
+    "Regular stakeholder communication",
+    "Continuous team improvement",
+    "Balance velocity with quality"
+  ]
+}

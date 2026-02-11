@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI IT Project Delivery Assistant - Corporate Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/corporate-dashboard.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <span>AI Assistant</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item active">
+                    <a href="#dashboard" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#chat" class="nav-link">
+                        <i class="fas fa-comments"></i>
+                        <span>AI Chat</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#projects" class="nav-link">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>Projects</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#tools" class="nav-link">
+                        <i class="fas fa-tools"></i>
+                        <span>Tools</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#analytics" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#standards" class="nav-link">
+                        <i class="fas fa-book"></i>
+                        <span>Standards</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">Loading...</div>
+                    <div class="user-role">IT Project Manager</div>
+                </div>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <h1 class="page-title">AI IT Project Delivery Assistant</h1>
+                <div class="breadcrumb">
+                    <span>Dashboard</span>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>AI Chat Interface</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="status-indicator">
+                    <span class="status-dot online"></span>
+                    <span>AI System Online</span>
+                </div>
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <button class="voice-toggle" id="voiceToggle" title="Enable Voice">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Quick Stats Cards -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number" id="totalQueries">0</h3>
+                            <p class="stat-label">Total Queries</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number" id="avgConfidence">0%</h3>
+                            <p class="stat-label">Avg Confidence</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number" id="toolsUsed">0</h3>
+                            <p class="stat-label">Tools Used</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number" id="avgResponseTime">0s</h3>
+                            <p class="stat-label">Avg Response</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Chat Interface -->
+            <section class="chat-section">
+                <div class="chat-container">
+                    <!-- Chat Header -->
+                    <div class="chat-header">
+                        <div class="chat-title">
+                            <i class="fas fa-robot"></i>
+                            <span>AI Project Assistant</span>
+                            <span class="ai-status online">●</span>
+                        </div>
+                        <div class="chat-actions">
+                            <button class="action-btn" id="clearChat" title="Clear Chat">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="action-btn" id="exportChat" title="Export Chat">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn" id="settingsBtn" title="Settings">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages -->
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="welcome-message">
+                            <div class="ai-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <h3>Welcome to AI IT Project Delivery Assistant</h3>
+                                <p>I can help you with:</p>
+                                <ul>
+                                    <li>📋 Project planning and SDLC guidance</li>
+                                    <li>🔄 Agile and DevOps best practices</li>
+                                    <li>⚠️ Risk assessment and management</li>
+                                    <li>📊 Timeline estimation and resource planning</li>
+                                    <li>📚 ITIL, ISO, and PMBOK standards</li>
+                                    <li>🛠️ Tool integration and automation</li>
+                                </ul>
+                                <p>Ask me anything about IT project delivery!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <div class="quick-actions-label">Quick Actions:</div>
+                        <div class="quick-action-buttons">
+                            <button class="quick-btn" data-query="Help me plan a software development project">
+                                <i class="fas fa-plus-circle"></i>
+                                Plan Project
+                            </button>
+                            <button class="quick-btn" data-query="Calculate risk score for our payment gateway integration">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Risk Assessment
+                            </button>
+                            <button class="quick-btn" data-query="Estimate timeline for medium complexity team of 5">
+                                <i class="fas fa-calendar-alt"></i>
+                                Timeline Estimate
+                            </button>
+                            <button class="quick-btn" data-query="Generate project document for our fintech system">
+                                <i class="fas fa-file-alt"></i>
+                                Generate Document
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="chat-input-container">
+                        <div class="input-wrapper">
+                            <textarea 
+                                id="messageInput" 
+                                placeholder="Ask about IT project delivery, risk assessment, timeline estimation..."
+                                rows="1"
+                                maxlength="2000"
+                            ></textarea>
+                            <div class="input-actions">
+                                <button class="input-btn" id="attachBtn" title="Attach File">
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                                <button class="input-btn" id="voiceBtn" title="Voice Input">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                                <button class="send-btn" id="sendBtn" title="Send Message">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="input-info">
+                            <span id="charCount">0</span>/2000 characters
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tool Results Panel -->
+            <section class="tool-results-section" id="toolResults" style="display: none;">
+                <div class="tool-results-header">
+                    <h3><i class="fas fa-tools"></i> Tool Execution Results</h3>
+                    <button class="close-btn" id="closeToolResults">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="tool-results-content" id="toolResultsContent">
+                    <!-- Tool results will be displayed here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <button class="close-btn" id="closeSettings">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label>Response Temperature</label>
+                    <input type="range" id="temperatureSlider" min="0" max="100" value="30">
+                    <span id="temperatureValue">0.3</span>
+                </div>
+                <div class="setting-group">
+                    <label>Max Tokens</label>
+                    <select id="maxTokens">
+                        <option value="500">500</option>
+                        <option value="1000" selected>1000</option>
+                        <option value="1500">1500</option>
+                        <option value="2000">2000</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label>Theme</label>
+                    <select id="themeSelect">
+                        <option value="light">Light</option>
+                        <option value="dark" selected>Dark</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelSettings">Cancel</button>
+                <button class="btn-primary" id="saveSettings">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>AI is processing your request...</p>
+        </div>
+    </div>
+
+    <script src="js/corporate-dashboard.js"></script>
+</body>
+</html>

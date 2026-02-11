@@ -1,0 +1,46 @@
+{
+  "title": "Software Development Life Cycle (SDLC)",
+  "description": "A systematic process for planning, creating, testing, and deploying information systems that includes methodologies, phases, and best practices for software development.",
+  "key_practices": [
+    "Requirements gathering and analysis",
+    "System design and architecture",
+    "Implementation and coding",
+    "Testing and quality assurance",
+    "Deployment and release management",
+    "Maintenance and support"
+  ],
+  "roles_involved": [
+    "Project Manager",
+    "Business Analyst",
+    "System Architect",
+    "Development Team",
+    "QA Engineers",
+    "DevOps Engineers",
+    "Stakeholders"
+  ],
+  "deliverables": [
+    "Requirements Specification Document",
+    "System Design Document",
+    "Source Code Repository",
+    "Test Plans and Test Cases",
+    "Deployment Scripts",
+    "User Documentation",
+    "Maintenance Reports"
+  ],
+  "common_risks": [
+    "Requirements creep and scope changes",
+    "Inadequate testing coverage",
+    "Poor communication between teams",
+    "Technical debt accumulation",
+    "Timeline delays and budget overruns",
+    "Security vulnerabilities"
+  ],
+  "best_practices": [
+    "Follow structured methodology (Waterfall, Agile, or Hybrid)",
+    "Implement version control and code reviews",
+    "Conduct regular stakeholder meetings",
+    "Use automated testing and CI/CD pipelines",
+    "Maintain comprehensive documentation",
+    "Plan for scalability and maintenance from start"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "title": "ISO Standards (ISO 27001 & ISO 9001)",
+  "description": "International standards for information security management (ISO 27001) and quality management systems (ISO 9001) that provide frameworks for organizational governance and compliance.",
+  "key_practices": [
+    "Risk Assessment and Management",
+    "Information Security Controls",
+    "Quality Management Systems",
+    "Document Control Procedures",
+    "Internal Audits",
+    "Management Reviews",
+    "Continual Improvement Processes"
+  ],
+  "roles_involved": [
+    "Compliance Officer",
+    "Information Security Manager",
+    "Quality Manager",
+    "Internal Auditor",
+    "Risk Manager",
+    "Senior Management",
+    "Process Owners"
+  ],
+  "deliverables": [
+    "Information Security Policy",
+    "Risk Assessment Reports",
+    "Statement of Applicability",
+    "Quality Manual",
+    "Internal Audit Reports",
+    "Management Review Minutes",
+    "Corrective Action Plans"
+  ],
+  "common_risks": [
+    "Non-compliance penalties",
+    "Data security breaches",
+    "Quality system failures",
+    "Audit findings",
+    "Certification loss",
+    "Customer trust issues"
+  ],
+  "best_practices": [
+    "Maintain comprehensive documentation",
+    "Conduct regular risk assessments",
+    "Implement continuous monitoring",
+    "Train staff on security and quality procedures",
+    "Perform regular internal audits",
+    "Establish clear incident response procedures"
+  ]
+}

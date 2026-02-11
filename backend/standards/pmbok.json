@@ -1,0 +1,52 @@
+{
+  "title": "PMBOK (Project Management Body of Knowledge)",
+  "description": "A comprehensive framework of project management best practices and guidelines published by the Project Management Institute, covering project management processes, knowledge areas, and methodologies.",
+  "key_practices": [
+    "Project Integration Management",
+    "Scope Management",
+    "Schedule Management",
+    "Cost Management",
+    "Quality Management",
+    "Resource Management",
+    "Communications Management",
+    "Risk Management",
+    "Procurement Management",
+    "Stakeholder Management"
+  ],
+  "roles_involved": [
+    "Project Manager",
+    "Project Sponsor",
+    "Project Team Members",
+    "Stakeholders",
+    "Program Manager",
+    "Portfolio Manager",
+    "Project Coordinator"
+  ],
+  "deliverables": [
+    "Project Charter",
+    "Project Management Plan",
+    "Work Breakdown Structure (WBS)",
+    "Project Schedule",
+    "Budget and Cost Estimates",
+    "Risk Register",
+    "Change Requests",
+    "Project Reports",
+    "Lessons Learned Documentation"
+  ],
+  "common_risks": [
+    "Scope creep and uncontrolled changes",
+    "Resource constraints and conflicts",
+    "Schedule delays and missed deadlines",
+    "Budget overruns",
+    "Poor stakeholder communication",
+    "Inadequate risk management"
+  ],
+  "best_practices": [
+    "Define clear project objectives and success criteria",
+    "Implement robust change control processes",
+    "Maintain comprehensive project documentation",
+    "Regular stakeholder communication and engagement",
+    "Proactive risk identification and mitigation",
+    "Use earned value management for performance tracking"
+  ]
+}

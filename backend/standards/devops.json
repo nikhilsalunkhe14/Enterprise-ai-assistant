@@ -1,0 +1,46 @@
+{
+  "title": "DevOps Practices",
+  "description": "A set of practices that combines software development (Dev) and IT operations (Ops) to shorten the systems development life cycle while delivering features, fixes, and updates frequently in close alignment with business objectives.",
+  "key_practices": [
+    "Continuous Integration (CI)",
+    "Continuous Deployment/Delivery (CD)",
+    "Infrastructure as Code (IaC)",
+    "Monitoring and Logging",
+    "Configuration Management",
+    "Automated Testing",
+    "Containerization and Orchestration"
+  ],
+  "roles_involved": [
+    "DevOps Engineer",
+    "Site Reliability Engineer",
+    "Cloud Architect",
+    "Security Engineer",
+    "Development Team",
+    "System Administrator"
+  ],
+  "deliverables": [
+    "CI/CD Pipeline Configuration",
+    "Infrastructure Code (Terraform, CloudFormation)",
+    "Docker/Kubernetes Manifests",
+    "Monitoring Dashboards",
+    "Automated Test Suites",
+    "Deployment Scripts",
+    "Incident Response Playbooks"
+  ],
+  "common_risks": [
+    "Pipeline configuration errors",
+    "Security misconfigurations",
+    "Resource optimization issues",
+    "Deployment failures",
+    "Monitoring blind spots",
+    "Compliance violations"
+  ],
+  "best_practices": [
+    "Implement infrastructure as code",
+    "Use blue-green or canary deployments",
+    "Automate everything possible",
+    "Monitor everything that matters",
+    "Practice blameless post-mortems",
+    "Maintain security throughout the pipeline"
+  ]
+}
