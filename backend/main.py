@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from services.standards_loader import get_all_standards
+from backend.services.standards_loader import get_all_standards
 from app.routes.prompt_routes import router as prompt_router
 from app.ai import initialize_ai_components
 from app.core.logger import logger
