@@ -436,11 +436,37 @@ body {
     background: rgba(255, 255, 255, 0.2);
 }
 
+/* Global Text Size Override */
+.chat-messages * {
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+}
+
+.chat-messages .message-text {
+    font-size: 18px !important;
+    line-height: 1.8 !important;
+}
+
+.chat-messages .message-text.response-text {
+    font-size: 20px !important;
+    line-height: 1.9 !important;
+}
+
+/* Force all nested elements to inherit */
+.chat-messages .message-text *,
+.chat-messages .message-text.response-text * {
+    font-size: inherit !important;
+    line-height: inherit !important;
+}
+
+/* Chat Messages */
 .chat-messages {
     flex: 1;
     padding: 1.5rem;
     overflow-y: auto;
     background: var(--light-bg);
+    font-size: 16px !important;
+    line-height: 1.7 !important;
 }
 
 .welcome-message {
@@ -515,20 +541,46 @@ body {
 }
 
 .message-text {
-    font-size: 15px !important;
-    line-height: 1.6 !important;
+    font-size: 16px !important;
+    line-height: 1.7 !important;
     color: #333 !important;
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }
 
 .message-text.response-text {
-    font-size: 16px !important;
-    line-height: 1.7 !important;
-    padding: 20px !important;
+    font-size: 18px !important;
+    line-height: 1.8 !important;
+    padding: 25px !important;
     background: #f8f9fa !important;
     border-radius: 8px !important;
     margin: 10px 0 !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+.message-text p,
+.message-text div,
+.message-text span,
+.message-text strong,
+.message-text ul,
+.message-text ol,
+.message-text li {
+    font-size: inherit !important;
+    line-height: inherit !important;
+    font-family: inherit !important;
+}
+
+.message-text.response-text p,
+.message-text.response-text div,
+.message-text.response-text span,
+.message-text.response-text strong,
+.message-text.response-text ul,
+.message-text.response-text ol,
+.message-text.response-text li {
+    font-size: inherit !important;
+    line-height: inherit !important;
+    font-family: inherit !important;
 }
 
 .message-meta {
@@ -936,6 +988,18 @@ body {
     
     .chat-messages {
         padding: 1rem;
+        font-size: 15px !important;
+        line-height: 1.6 !important;
+    }
+    
+    .chat-messages .message-text {
+        font-size: 17px !important;
+        line-height: 1.7 !important;
+    }
+    
+    .chat-messages .message-text.response-text {
+        font-size: 18px !important;
+        line-height: 1.8 !important;
     }
     
     .message-bubble {
@@ -976,6 +1040,18 @@ body {
     
     .chat-messages {
         padding: 0.75rem;
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+    }
+    
+    .chat-messages .message-text {
+        font-size: 16px !important;
+        line-height: 1.6 !important;
+    }
+    
+    .chat-messages .message-text.response-text {
+        font-size: 17px !important;
+        line-height: 1.7 !important;
     }
     
     .message-bubble {
