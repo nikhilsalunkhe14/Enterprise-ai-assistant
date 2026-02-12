@@ -199,8 +199,8 @@ body {
 
 .response-section h3 {
     color: #333;
-    font-size: 20px;
-    margin-bottom: 10px;
+    font-size: 24px;
+    margin-bottom: 15px;
 }
 
 .card {
@@ -213,16 +213,16 @@ body {
 .card-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 15px 20px;
+    padding: 20px 25px;
 }
 
 .card-header h4 {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
 }
 
 .card-body {
-    padding: 20px;
+    padding: 25px;
 }
 
 /* Metadata Grid */
@@ -247,16 +247,16 @@ body {
 .badge {
     background: #e9ecef;
     color: #495057;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
     font-weight: 500;
 }
 
 .confidence-badge {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
     font-weight: 500;
 }
 
@@ -277,33 +277,37 @@ body {
 
 /* Analysis */
 .analysis-item {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .analysis-item label {
     font-weight: 600;
     color: #333;
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-size: 16px;
 }
 
 .analysis-item p {
     color: #666;
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 15px;
+    line-height: 1.6;
 }
 
 /* Prompt Content */
 .prompt-content {
     background: #f8f9fa;
-    padding: 20px;
+    padding: 25px;
     border-radius: 8px;
     border-left: 4px solid #667eea;
     white-space: pre-wrap;
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
     color: #333;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
 }
 
 /* Recommendations */
@@ -316,7 +320,7 @@ body {
 .recommendation-section h5 {
     color: #333;
     margin-bottom: 15px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
 }
 
@@ -327,12 +331,13 @@ body {
 
 .recommendation-list li {
     background: #f8f9fa;
-    padding: 10px 15px;
-    margin-bottom: 8px;
+    padding: 12px 18px;
+    margin-bottom: 10px;
     border-radius: 6px;
     border-left: 3px solid #667eea;
-    font-size: 14px;
+    font-size: 15px;
     color: #333;
+    line-height: 1.5;
 }
 
 .recommendation-list li:last-child {
