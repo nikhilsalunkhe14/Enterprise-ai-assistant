@@ -4,6 +4,9 @@ FROM python:3.10-slim
 # Set working directory
 WORKDIR /app
 
+# Add current directory to Python path
+ENV PYTHONPATH=/app:$PYTHONPATH
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
@@ -35,4 +38,4 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:7860/health || exit 1
 
 # Start the application
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
