@@ -56,6 +56,7 @@ class CorporateDashboard {
         const sendBtn = document.getElementById('sendBtn');
         
         sendBtn.addEventListener('click', () => this.sendMessage());
+        
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -95,10 +96,11 @@ class CorporateDashboard {
 
         // Settings modal
         document.getElementById('settingsBtn').addEventListener('click', () => {
-            this.openSettings();
+            this.showSettings();
         });
 
         document.getElementById('closeSettings').addEventListener('click', () => {
+            this.hideSettings();
             this.closeSettings();
         });
 
@@ -477,30 +479,129 @@ class CorporateDashboard {
         }
     }
 
-    exportChat() {
+    toggleExportMenu() {
+        const menu = document.getElementById('exportMenu');
+        menu.classList.toggle('show');
+    }
+
+    hideExportMenu() {
+        const menu = document.getElementById('exportMenu');
+        menu.classList.remove('show');
+    }
+
+    exportChat(format = 'json') {
         if (this.chatHistory.length === 0) {
             this.showToast('No chat history to export', 'warning');
             return;
         }
 
+        try {
+            if (format === 'pdf') {
+                this.exportToPDF();
+            } else {
+                this.exportToJSON();
+            }
+        } catch (error) {
+            console.error('Export error:', error);
+            this.showToast('Export failed. Please try again.', 'error');
+        }
+        
+        this.hideExportMenu();
+    }
+
+    exportToJSON() {
         const chatData = {
             exportDate: new Date().toISOString(),
-            user: this.userName,
-            sessionId: this.sessionId,
-            messages: this.chatHistory
+            totalMessages: this.chatHistory.length,
+            chatHistory: this.chatHistory
         };
 
         const blob = new Blob([JSON.stringify(chatData, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `chat-export-${new Date().toISOString().split('T')[0]}.json`;
+        a.download = `ai-assistant-chat-${new Date().toISOString().split('T')[0]}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        this.showToast('Chat exported successfully', 'success');
+        this.showToast('Chat exported as JSON', 'success');
+    }
+
+    async exportToPDF() {
+        this.showToast('Generating PDF...', 'info');
+
+        try {
+            // Load jsPDF library
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+            script.onload = () => {
+                this.generatePDFContent();
+            };
+            script.onerror = () => {
+                this.showToast('Failed to load PDF library', 'error');
+            };
+            document.head.appendChild(script);
+        } catch (error) {
+            console.error('PDF generation error:', error);
+            this.showToast('PDF generation failed', 'error');
+        }
+    }
+
+    generatePDFContent() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Add title
+        doc.setFontSize(20);
+        doc.setTextColor(102, 126, 234);
+        doc.text('AI IT Project Delivery Assistant', 105, 20);
+
+        // Add metadata
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Export Date: ${new Date().toLocaleString()}`, 20, 35);
+        doc.text(`Total Messages: ${this.chatHistory.length}`, 20, 45);
+
+        // Add chat content
+        let yPosition = 65;
+        doc.setFontSize(10);
+        
+        this.chatHistory.forEach((message, index) => {
+            if (yPosition > 270) {
+                doc.addPage();
+                yPosition = 20;
+            }
+
+            const sender = message.sender === 'user' ? 'You' : 'AI Assistant';
+            const timestamp = new Date(message.timestamp).toLocaleString();
+            
+            doc.setFontSize(12);
+            doc.setTextColor(102, 126, 234);
+            doc.text(`${sender} - ${timestamp}`, 20, yPosition);
+            
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            
+            const content = message.content.replace(/\*\*(.*?)\*\*/g, '$1'); // Remove markdown
+            const lines = doc.splitTextToSize(content, 170, { fontSize: 10 });
+            
+            lines.forEach(line => {
+                if (yPosition > 270) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                doc.text(line, 20, yPosition);
+                yPosition += 6;
+            });
+            
+            yPosition += 10;
+        });
+
+        // Save PDF
+        doc.save(`ai-assistant-chat-${new Date().toISOString().split('T')[0]}.pdf`);
+        this.showToast('Chat exported as PDF', 'success');
     }
 
     openSettings() {
