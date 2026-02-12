@@ -385,10 +385,11 @@ body {
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--border-color);
     overflow: hidden;
-    height: 100vh;
+    height: calc(100vh - 120px);
     min-height: 600px;
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
 }
 
 .chat-container {
@@ -448,13 +449,13 @@ body {
 }
 
 .chat-messages .message-text {
-    font-size: 18px !important;
-    line-height: 1.8 !important;
+    font-size: 16px !important;
+    line-height: 1.7 !important;
 }
 
 .chat-messages .message-text.response-text {
-    font-size: 20px !important;
-    line-height: 1.9 !important;
+    font-size: 17px !important;
+    line-height: 1.8 !important;
 }
 
 /* Force all nested elements to inherit */
@@ -473,7 +474,7 @@ body {
     font-size: 16px !important;
     line-height: 1.7 !important;
     min-height: 400px;
-    max-height: calc(80vh - 200px);
+    max-height: calc(100vh - 320px);
 }
 
 .welcome-message {
@@ -971,12 +972,12 @@ body {
     }
     
     .chat-section {
-        height: 75vh;
+        height: calc(100vh - 140px);
         min-height: 550px;
     }
     
     .chat-messages {
-        max-height: calc(75vh - 180px);
+        max-height: calc(100vh - 340px);
     }
 }
 
@@ -1003,7 +1004,7 @@ body {
     }
     
     .chat-section {
-        height: 70vh;
+        height: calc(100vh - 160px);
         min-height: 500px;
     }
     
@@ -1011,17 +1012,17 @@ body {
         padding: 1rem;
         font-size: 15px !important;
         line-height: 1.6 !important;
-        max-height: calc(70vh - 160px);
+        max-height: calc(100vh - 360px);
     }
     
     .chat-messages .message-text {
-        font-size: 17px !important;
-        line-height: 1.7 !important;
+        font-size: 15px !important;
+        line-height: 1.6 !important;
     }
     
     .chat-messages .message-text.response-text {
-        font-size: 18px !important;
-        line-height: 1.8 !important;
+        font-size: 16px !important;
+        line-height: 1.7 !important;
     }
     
     .message-bubble {
@@ -1081,7 +1082,7 @@ body {
     }
     
     .chat-section {
-        height: 65vh;
+        height: calc(100vh - 180px);
         min-height: 450px;
     }
     
@@ -1089,17 +1090,17 @@ body {
         padding: 0.75rem;
         font-size: 14px !important;
         line-height: 1.5 !important;
-        max-height: calc(65vh - 140px);
+        max-height: calc(100vh - 380px);
     }
     
     .chat-messages .message-text {
-        font-size: 16px !important;
-        line-height: 1.6 !important;
+        font-size: 14px !important;
+        line-height: 1.5 !important;
     }
     
     .chat-messages .message-text.response-text {
-        font-size: 17px !important;
-        line-height: 1.7 !important;
+        font-size: 15px !important;
+        line-height: 1.6 !important;
     }
     
     .message-bubble {
