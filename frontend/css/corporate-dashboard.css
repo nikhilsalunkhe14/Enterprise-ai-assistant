@@ -385,7 +385,7 @@ body {
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--border-color);
     overflow: hidden;
-    height: 80vh;
+    height: 100vh;
     min-height: 600px;
     display: flex;
     flex-direction: column;
