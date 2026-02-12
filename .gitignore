@@ -58,3 +58,7 @@ node_modules/
 
 # Render
 .render.yaml
+
+# Docker
+Dockerfile.old
+docker-compose.override.yml

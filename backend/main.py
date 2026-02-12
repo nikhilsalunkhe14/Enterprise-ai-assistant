@@ -14,8 +14,8 @@ from app.core.logger import logger
 import json
 import os
 
-# Get port from environment (Render provides PORT)
-port = int(os.environ.get("PORT", 8000))
+# Get port from environment (HuggingFace Spaces uses 7860)
+port = int(os.environ.get("PORT", 7860))
 
 # Rate limiting
 limiter = Limiter(key_func=get_remote_address)
