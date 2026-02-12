@@ -1,6 +1,7 @@
 import json
 import os
 import asyncio
+import re
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Any, Optional, Tuple
 from app.database import db_manager
@@ -22,6 +23,15 @@ class PromptEngine:
             "monitoring": ["monitor", "monitoring", "track", "measure", "control", "review", "report", "status"],
             "risk": ["risk", "risks", "risk management", "mitigation", "threat", "vulnerability", "assessment"],
             "documentation": ["document", "documentation", "report", "manual", "guide", "specification", "wiki"]
+        }
+        # Context memory for maintaining conversation context
+        self.conversation_context = {
+            "last_domain": None,
+            "last_response": None,
+            "project_type": None,
+            "methodology": None,
+            "timeline": None,
+            "budget": None
         }
 
     def load_standard_data(self, domain: str) -> Optional[Dict]:
@@ -237,7 +247,60 @@ class PromptEngine:
         
         return response
     
-    def _calculate_rag_confidence(self, retrieved_chunks: List[Dict]) -> int:
+    def update_conversation_context(self, domain: str, stage: str, response_content: str):
+        """Update conversation context for maintaining context across related questions"""
+        self.conversation_context["last_domain"] = domain
+        self.conversation_context["last_stage"] = stage
+        self.conversation_context["last_response"] = response_content
+        
+        # Extract project details from response
+        if "agile" in response_content.lower():
+            self.conversation_context["methodology"] = "agile"
+        elif "waterfall" in response_content.lower():
+            self.conversation_context["methodology"] = "waterfall"
+        elif "scrum" in response_content.lower():
+            self.conversation_context["methodology"] = "scrum"
+        elif "kanban" in response_content.lower():
+            self.conversation_context["methodology"] = "kanban"
+        
+        # Extract timeline information
+        if "week" in response_content.lower():
+            import re
+            weeks = re.findall(r'(\d+)\s*week', response_content.lower())
+            if weeks:
+                self.conversation_context["timeline"] = f"{weeks[0]} weeks"
+        
+        # Extract project type
+        if "software" in response_content.lower():
+            self.conversation_context["project_type"] = "software"
+        elif "infrastructure" in response_content.lower():
+            self.conversation_context["project_type"] = "infrastructure"
+        elif "business" in response_content.lower():
+            self.conversation_context["project_type"] = "business"
+
+    def generate_context_aware_prompt(self, user_query: str, domain: str, stage: str, standard_data: Optional[Dict]) -> str:
+        """Generate prompt with context awareness for related questions"""
+        context_info = ""
+        
+        # Add context if this is a related question
+        if self.conversation_context["last_domain"] == domain and self.conversation_context["last_response"]:
+            context_info = "\n**IMPORTANT CONTEXT:** Based on our previous discussion about "
+            
+            if self.conversation_context["methodology"]:
+                context_info += f"{self.conversation_context['methodology'].title()} methodology"
+            
+            if self.conversation_context["project_type"]:
+                context_info += f" for {self.conversation_context['project_type']} project"
+            
+            if self.conversation_context["timeline"]:
+                context_info += f" with {self.conversation_context['timeline']} timeline"
+            
+            context_info += ", please ensure your response is consistent with and builds upon the previous guidance provided.\n\n"
+        
+        # Generate the base prompt
+        base_prompt = self.generate_professional_prompt(domain, stage, standard_data)
+        
+        return context_info + base_prompt
         """Calculate confidence score based on retrieval quality"""
         if not retrieved_chunks:
             return 0
@@ -257,10 +320,14 @@ class PromptEngine:
         return max(base_confidence, 25)
 
     def generate_prompt(self, user_query: str, session_id: str) -> Dict:
-        """Generate structured response using RAG + Groq LLM"""
+        """Generate structured response using RAG + Groq LLM with context awareness"""
 
         try:
-            # Step 1: Retrieve relevant context from FAISS
+            # Step 1: Detect domain and stage
+            domain, _ = self.detect_domain_with_reasoning(user_query)
+            stage, _ = self.detect_stage_with_reasoning(user_query)
+            
+            # Step 2: Retrieve relevant context from FAISS
             from app.ai import vector_store
             retrieved_chunks = vector_store.search_similar(user_query, top_k=3)
 
@@ -272,10 +339,45 @@ class PromptEngine:
 
             context_text = "\n\n".join(retrieved_context)
 
-            # Step 2: Define system prompt
-            system_prompt = """
+            # Step 3: Check if this is a related question and use context-aware prompting
+            if (self.conversation_context["last_domain"] == domain and 
+                self.conversation_context["last_response"] and
+                stage in ["planning", "execution", "monitoring", "risk", "documentation"]):
+                
+                # Use context-aware prompt for related questions
+                system_prompt = f"""
+You are an AI IT Project Delivery Assistant with memory of previous conversations.
+The user previously asked about {self.conversation_context['last_domain']} in the {self.conversation_context['last_stage']} phase.
+Current question is related to the same project context.
+
+IMPORTANT: Maintain consistency with previous guidance and build upon the established context.
+If the user asks for models, frameworks, or tools related to the previously discussed methodology, provide items that are specifically relevant to and compatible with that methodology.
+
+Always respond in this structured format:
+- Overview
+- Planning
+- Execution  
+- Risk Management
+- Deliverables
+- Success Metrics
+"""
+
+                user_prompt = f"""
+Previous Context: {self.conversation_context['methodology']} methodology for {self.conversation_context['project_type']} project
+
+Current User Query:
+{user_query}
+
+Relevant IT Standards Context:
+{context_text}
+
+Generate a professional structured response that builds upon the previous context.
+"""
+            else:
+                # Use standard prompt for new topics
+                system_prompt = """
 You are an AI IT Project Delivery Assistant.
-Use the provided IT standards context to generate structured, professional guidance.
+Use provided IT standards context to generate structured, professional guidance.
 
 Always respond in this structured format:
 - Overview
@@ -286,8 +388,7 @@ Always respond in this structured format:
 - Success Metrics
 """
 
-            # Step 3: Create user prompt
-            user_prompt = f"""
+                user_prompt = f"""
 User Query:
 {user_query}
 
@@ -299,6 +400,9 @@ Generate a professional structured response.
 
             # Step 4: Call Groq LLM
             llm_response = self.llm.generate_response(system_prompt, user_prompt)
+
+            # Step 5: Update conversation context
+            self.update_conversation_context(domain, stage, llm_response)
 
             # Tool Decision Logic
             tool_output = None
