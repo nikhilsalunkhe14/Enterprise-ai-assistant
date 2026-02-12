@@ -3,10 +3,10 @@ import os
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Any, Optional, Tuple
-from backend.app.database import db_manager
-from backend.app.ai.llm_service import LLMService
-from backend.app.tools.tool_service import ToolService
-from backend.app.core.logger import logger
+from app.database import db_manager
+from app.ai.llm_service import LLMService
+from app.tools.tool_service import ToolService
+from app.core.logger import logger
 
 
 

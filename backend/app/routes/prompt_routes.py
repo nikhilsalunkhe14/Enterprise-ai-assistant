@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Request
 from slowapi import Limiter
 from slowapi.util import get_remote_address
-from backend.app.models.request_models import PromptRequest
-from backend.app.services.prompt_engine import PromptEngine
-from backend.app.ai import vector_store
-from backend.app.core.logger import logger
+from app.models.request_models import PromptRequest
+from app.services.prompt_engine import PromptEngine
+from app.ai import vector_store
+from app.core.logger import logger
 
 router = APIRouter()
 prompt_engine = PromptEngine()

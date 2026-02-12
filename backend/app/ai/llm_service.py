@@ -2,8 +2,8 @@ import os
 import httpx
 import asyncio
 from groq import Groq
-from backend.app.core.config import settings
-from backend.app.core.logger import logger
+from app.core.config import settings
+from app.core.logger import logger
 
 class LLMService:
     def __init__(self):

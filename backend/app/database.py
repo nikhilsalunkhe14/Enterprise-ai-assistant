@@ -1,8 +1,8 @@
 import sqlite3
 import os
 from datetime import datetime
-from backend.app.core.config import settings
-from backend.app.core.logger import logger
+from app.core.config import settings
+from app.core.logger import logger
 
 class DatabaseManager:
     def __init__(self):
