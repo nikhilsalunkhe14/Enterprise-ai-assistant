@@ -247,23 +247,29 @@ class CorporateDashboard {
         
         if (sender === 'user') {
             messageDiv.innerHTML = `
-                <div class="message-bubble">
-                    <div class="message-text">${this.escapeHtml(content)}</div>
-                    <div class="message-meta">${timestamp}</div>
+                <div class="message-content">
+                    <div class="message-text">${content}</div>
+                    <div class="message-time">${timestamp}</div>
                 </div>
             `;
         } else {
-            // AI message with markdown-like formatting
-            const formattedContent = this.formatMessage(content);
+            // AI response with proper formatting
+            const formattedContent = content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>')
+                .replace(/• (.*?)(\n|$)/g, '<li>$1</li>')
+                .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+            
             messageDiv.innerHTML = `
-                <div class="ai-avatar">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <div class="message-bubble ${isError ? 'error' : ''}">
-                    <div class="message-text">${formattedContent}</div>
-                    <div class="message-meta">${timestamp} ${isError ? '• Error' : ''}</div>
+                <div class="message-content">
+                    <div class="message-text response-text">${formattedContent}</div>
+                    <div class="message-time">${timestamp}</div>
                 </div>
             `;
+        }
+        
+        if (isError) {
+            messageDiv.classList.add('error');
         }
         
         chatMessages.appendChild(messageDiv);
