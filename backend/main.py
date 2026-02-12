@@ -40,9 +40,7 @@ app.add_middleware(
 app.include_router(prompt_router)
 
 # Mount static files for frontend
-frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
-if os.path.exists(frontend_path):
-    app.mount("/frontend", StaticFiles(directory=frontend_path), name="frontend")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.on_event("startup")
 async def startup_event():
@@ -53,10 +51,10 @@ async def startup_event():
     logger.info("✅ Vector store ready")
     logger.info("🚀 AI components initialized successfully!")
 
-@app.get("/")
+@app.get("/", response_class=RedirectResponse)
 async def root():
     """Redirect to corporate dashboard"""
-    return RedirectResponse(url="/frontend/corporate-dashboard.html")
+    return RedirectResponse(url="/static/corporate-dashboard.html")
 
 @app.get("/health")
 @limiter.limit("60/minute")
