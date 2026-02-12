@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Settings:
-    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY")
-    DATABASE_URL: str = os.getenv("DATABASE_URL")
+    GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./ai_agent.db")
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
 
 settings = Settings()
