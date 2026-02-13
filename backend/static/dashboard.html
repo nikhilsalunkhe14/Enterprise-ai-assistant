@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Engineering Agent - Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>AI Prompt Engineering Agent</h2>
+            </div>
+            <div class="nav-user">
+                <span id="userName" class="user-name">Loading...</span>
+                <button id="logoutBtn" class="btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Query Section -->
+            <div class="query-section">
+                <h3>Enter Your Query</h3>
+                <form id="queryForm">
+                    <textarea 
+                        id="userQuery" 
+                        placeholder="Ask for IT project delivery guidance... (e.g., 'Help me plan a DevOps project delivery')"
+                        rows="4"
+                        required
+                    ></textarea>
+                    <button type="submit" class="btn-primary">
+                        <span id="submitText">Generate Guidance</span>
+                        <div id="loadingSpinner" class="spinner hidden"></div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Response Section -->
+            <div id="responseSection" class="response-section hidden">
+                <h3>AI Guidance Response</h3>
+                
+                <!-- Metadata Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Metadata</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="metadata-grid">
+                            <div class="metadata-item">
+                                <label>Detected Domain:</label>
+                                <span id="detectedDomain" class="badge">-</span>
+                            </div>
+                            <div class="metadata-item">
+                                <label>Detected Stage:</label>
+                                <span id="detectedStage" class="badge">-</span>
+                            </div>
+                            <div class="metadata-item">
+                                <label>Confidence Score:</label>
+                                <span id="confidenceScore" class="confidence-badge">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Analysis</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="analysis-item">
+                            <label>Domain Reason:</label>
+                            <p id="domainReason">-</p>
+                        </div>
+                        <div class="analysis-item">
+                            <label>Stage Reason:</label>
+                            <p id="stageReason">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Generated Prompt Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Generated Guidance</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="generatedPrompt" class="prompt-content">-</div>
+                    </div>
+                </div>
+
+                <!-- Recommendations Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Recommendations</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="recommendations-grid">
+                            <div class="recommendation-section">
+                                <h5>Recommended Roles</h5>
+                                <ul id="recommendedRoles" class="recommendation-list">
+                                    <li>No roles available</li>
+                                </ul>
+                            </div>
+                            <div class="recommendation-section">
+                                <h5>Recommended Deliverables</h5>
+                                <ul id="recommendedDeliverables" class="recommendation-list">
+                                    <li>No deliverables available</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

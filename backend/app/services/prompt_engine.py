@@ -17,6 +17,14 @@ class PromptEngine:
         self.llm = LLMService()
         self.tools = ToolService()
         self.executor = ThreadPoolExecutor(max_workers=10)
+        self.domain_keywords = {
+            "sdlc": ["sdlc", "software development lifecycle", "development", "coding", "programming"],
+            "agile": ["agile", "scrum", "kanban", "sprint", "iteration", "backlog"],
+            "devops": ["devops", "deployment", "ci/cd", "continuous integration", "continuous delivery"],
+            "itil": ["itil", "it service", "service management", "incident", "change management"],
+            "iso": ["iso", "standard", "compliance", "certification", "quality management"],
+            "pmbok": ["pmbok", "project management", "pmp", "stakeholder", "charter"]
+        }
         self.stage_keywords = {
             "planning": ["plan", "planning", "strategy", "roadmap", "initiation", "charter", "scope", "requirements"],
             "execution": ["execute", "execution", "implement", "develop", "build", "create", "deliver", "produce"],
@@ -33,6 +41,11 @@ class PromptEngine:
             "timeline": None,
             "budget": None
         }
+        # Set standards directory path
+        self.standards_dir = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+            "standards"
+        )
 
     def load_standard_data(self, domain: str) -> Optional[Dict]:
         """Load standard data for a specific domain"""
