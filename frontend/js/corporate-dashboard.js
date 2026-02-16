@@ -429,8 +429,18 @@ class CorporateDashboard {
             this.toggleVoice();
         }
 
+        // Check for speech recognition support
         if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
             this.showToast('Speech recognition not supported in your browser. Please try Chrome or Edge.', 'error');
+            return;
+        }
+
+        // Check for microphone permission
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(track => track.stop());
+        } catch (error) {
+            this.showToast('Microphone permission denied. Please allow microphone access.', 'error');
             return;
         }
 
@@ -438,8 +448,9 @@ class CorporateDashboard {
         const recognition = new SpeechRecognition();
         
         recognition.continuous = false;
-        recognition.interimResults = true; // Enable interim results for better UX
+        recognition.interimResults = true;
         recognition.lang = 'en-US';
+        recognition.maxAlternatives = 1;
 
         const voiceBtn = document.getElementById('voiceBtn');
         const messageInput = document.getElementById('messageInput');
@@ -453,16 +464,30 @@ class CorporateDashboard {
         };
 
         recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            messageInput.value = transcript;
+            let finalTranscript = '';
+            let interimTranscript = '';
+            
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                    finalTranscript += transcript + ' ';
+                } else {
+                    interimTranscript += transcript;
+                }
+            }
+            
+            // Update input with final + interim results
+            messageInput.value = (messageInput.value + finalTranscript).trim();
             this.updateCharCount();
             this.autoResizeTextarea(messageInput);
             
-            if (event.results[0].isFinal) {
-                this.showToast('Voice input captured successfully!', 'success');
-                this.resetVoiceButton();
-                // Focus on input for potential editing
-                messageInput.focus();
+            // Show interim results in toast for better UX
+            if (interimTranscript) {
+                this.showToast(`Hearing: ${interimTranscript}`, 'info');
+            }
+            
+            if (finalTranscript) {
+                this.showToast('Voice input captured!', 'success');
             }
         };
 
@@ -483,8 +508,11 @@ class CorporateDashboard {
                 case 'network':
                     errorMessage = 'Network error. Please check your connection.';
                     break;
+                case 'service-not-allowed':
+                    errorMessage = 'Speech recognition service not allowed.';
+                    break;
                 default:
-                    errorMessage = `Voice input failed: ${event.error}`;
+                    errorMessage = `Voice error: ${event.error}`;
             }
             
             this.showToast(errorMessage, 'error');
@@ -493,12 +521,14 @@ class CorporateDashboard {
 
         recognition.onend = () => {
             this.resetVoiceButton();
+            // Focus on input for potential editing
+            messageInput.focus();
         };
 
         try {
             recognition.start();
         } catch (error) {
-            console.error('Speech recognition start error:', error);
+            console.error('Failed to start recognition:', error);
             this.showToast('Failed to start voice recognition. Please try again.', 'error');
             this.resetVoiceButton();
         }
