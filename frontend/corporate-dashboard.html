@@ -3,91 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI IT Project Delivery Assistant - Corporate Dashboard</title>
+    <title>AI IT Project Delivery Assistant</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/corporate-dashboard.css">
 </head>
 <body>
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="logo">
-                <i class="fas fa-robot"></i>
-                <span>AI Assistant</span>
-            </div>
-            <button class="sidebar-toggle" id="sidebarToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-        
-        <nav class="sidebar-nav">
-            <ul>
-                <li class="nav-item active">
-                    <a href="#dashboard" class="nav-link">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#chat" class="nav-link">
-                        <i class="fas fa-comments"></i>
-                        <span>AI Chat</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#projects" class="nav-link">
-                        <i class="fas fa-project-diagram"></i>
-                        <span>Projects</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#tools" class="nav-link">
-                        <i class="fas fa-tools"></i>
-                        <span>Tools</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#analytics" class="nav-link">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Analytics</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#standards" class="nav-link">
-                        <i class="fas fa-book"></i>
-                        <span>Standards</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        
-        <div class="sidebar-footer">
-            <div class="user-profile">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-info">
-                    <div class="user-name" id="userName">Loading...</div>
-                    <div class="user-role">IT Project Manager</div>
-                </div>
-            </div>
-            <button class="logout-btn" id="logoutBtn">
-                <i class="fas fa-sign-out-alt"></i>
-                Logout
-            </button>
-        </div>
-    </aside>
-
     <!-- Main Content Area -->
-    <main class="main-content">
+    <main class="main-content full-width">
         <!-- Top Header -->
         <header class="top-header">
             <div class="header-left">
                 <h1 class="page-title">AI IT Project Delivery Assistant</h1>
                 <div class="breadcrumb">
-                    <span>Dashboard</span>
-                    <i class="fas fa-chevron-right"></i>
                     <span>AI Chat Interface</span>
                 </div>
             </div>
@@ -96,12 +24,9 @@
                     <span class="status-dot online"></span>
                     <span>AI System Online</span>
                 </div>
-                <div class="notification-bell">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                </div>
-                <button class="voice-toggle" id="voiceToggle" title="Enable Voice">
-                    <i class="fas fa-microphone"></i>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
                 </button>
             </div>
         </header>

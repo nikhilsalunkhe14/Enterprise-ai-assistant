@@ -37,20 +37,6 @@ class CorporateDashboard {
     }
 
     setupEventListeners() {
-        // Sidebar toggle
-        document.getElementById('sidebarToggle').addEventListener('click', () => {
-            document.getElementById('sidebar').classList.toggle('collapsed');
-            document.querySelector('.main-content').classList.toggle('expanded');
-        });
-
-        // Navigation
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.handleNavigation(link.getAttribute('href').substring(1));
-            });
-        });
-
         // Chat functionality
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -157,20 +143,6 @@ class CorporateDashboard {
         
         // Focus on message input
         document.getElementById('messageInput').focus();
-    }
-
-    handleNavigation(section) {
-        // Update active nav
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
-        });
-        document.querySelector(`[href="#${section}"]`).classList.add('active');
-
-        // Handle section navigation (can be expanded)
-        console.log(`Navigating to ${section}`);
-        
-        // For now, just show a toast notification
-        this.showToast(`${section.charAt(0).toUpperCase() + section.slice(1)} section coming soon!`, 'info');
     }
 
     async sendMessage() {

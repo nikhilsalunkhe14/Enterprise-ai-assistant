@@ -196,9 +196,16 @@ body {
 
 /* Main Content */
 .main-content {
-    margin-left: var(--sidebar-width);
+    margin-left: 0;
+    padding: 2rem;
     min-height: 100vh;
-    transition: margin-left 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.main-content.full-width {
+    margin-left: 0 !important;
+    padding: 2rem;
+    width: 100%;
 }
 
 .main-content.expanded {
