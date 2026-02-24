@@ -4,6 +4,8 @@ from pydantic import BaseModel
 from typing import List, Optional
 import json
 from datetime import datetime
+from services.jwt_service import get_current_user
+from models.user import User
 
 # AI Models Configuration
 AI_MODELS = {
@@ -61,7 +63,7 @@ async def get_available_models():
 @router.post("/chat", response_model=ChatResponse)
 async def chat_with_ai(
     request: ChatRequest,
-    current_user: dict = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """Chat with AI model"""
@@ -72,7 +74,7 @@ async def chat_with_ai(
         conversation_service = ConversationService(db)
         conversation = conversation_service.get_conversation_by_id(
             conversation_id=request.conversation_id,
-            user_id=current_user[0]  # user_id from get_current_user
+            user_id=current_user.id
         )
         
         if not conversation:
