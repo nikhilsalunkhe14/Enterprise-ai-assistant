@@ -6,6 +6,7 @@ import json
 from datetime import datetime
 from services.jwt_service import get_current_user
 from models.user import User
+from database.connection import get_db
 
 # AI Models Configuration
 AI_MODELS = {

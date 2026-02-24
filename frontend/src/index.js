@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider, ChatProvider, ProtectedRoute } from './index';
 import { Login } from './components/Login';
 import { Sidebar } from './components/Sidebar';
-import { ChatWindow } from './components/ChatWindow-fixed';
+import { ChatWindow } from './components/ChatWindow-simple';
 import { ModelSelector } from './components/ModelSelector';
 
 const Dashboard = () => {
@@ -19,9 +19,7 @@ const Dashboard = () => {
               <h1 className="text-xl font-bold text-gray-900">Enterprise AI Assistant</h1>
               <ModelSelector />
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="text-sm text-gray-600">Phase 3: ChatGPT-like Interface</div>
-            </div>
+            <div className="text-sm text-gray-600">Phase 3: ChatGPT-like Interface</div>
           </div>
         </div>
         
