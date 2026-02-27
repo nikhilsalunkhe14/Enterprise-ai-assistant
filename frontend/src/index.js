@@ -1,4 +1,10 @@
-export { useAuth, useChat, AuthProvider, ChatProvider, ProtectedRoute, Login } from './index-working.js';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useAuth, useChat, AuthProvider, ChatProvider, ProtectedRoute, Login } from './index-working.js';
+import { Sidebar } from './components/Sidebar';
+import { ChatWindow } from './components/ChatWindow-working';
+import { ModelSelector } from './components/ModelSelector';
 
 const Dashboard = () => {
   return (
