@@ -16,11 +16,11 @@ npm install
 
 Start the application:
 bash
-# Terminal 1: Backend
+#Terminal 1: Backend
 cd backend
 python main_new.py
  
-# Terminal 2: Frontend
+#Terminal 2: Frontend
 cd frontend
 npm start
 
