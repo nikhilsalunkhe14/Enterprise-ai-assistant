@@ -4,8 +4,24 @@ from models.schemas import UserCreate
 from passlib.context import CryptContext
 from datetime import datetime
 
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Password hashing - using simpler approach
+import hashlib
+import secrets
+
+def hash_password(password: str) -> str:
+    """Simple password hashing"""
+    salt = secrets.token_hex(16)
+    password_hash = hashlib.sha256((password + salt).encode()).hexdigest()
+    return f"{salt}${password_hash}"
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Verify password"""
+    try:
+        salt, password_hash = hashed_password.split('$')
+        expected_hash = hashlib.sha256((plain_password + salt).encode()).hexdigest()
+        return secrets.compare_digest(password_hash, expected_hash)
+    except:
+        return False
 
 class UserService:
     def __init__(self, db: Session):
@@ -21,8 +37,8 @@ class UserService:
 
     def create_user(self, user: UserCreate) -> User:
         """Create new user"""
-        # Hash password
-        hashed_password = pwd_context.hash(user.password)
+        # Hash password using simple method
+        hashed_password = hash_password(user.password)
         
         # Create user object
         db_user = User(
@@ -44,7 +60,7 @@ class UserService:
         if not user:
             return None
         
-        if not pwd_context.verify(password, user.password_hash):
+        if not verify_password(password, user.password_hash):
             return None
         
         # Update last login
@@ -55,4 +71,4 @@ class UserService:
 
     def verify_password(self, plain_password: str, hashed_password: str) -> bool:
         """Verify password"""
-        return pwd_context.verify(plain_password, hashed_password)
+        return verify_password(plain_password, hashed_password)

@@ -14,17 +14,22 @@ lib/
 lib64/
 parts/
 sdist/
-var/
-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
 # Environment
 .env
-.venv
-env/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Virtual Environment
+.venv/
 venv/
+env/
 ENV/
 env.bak/
 venv.bak/
@@ -36,29 +41,89 @@ venv.bak/
 *.safetensors
 
 # Logs
-*.log
 logs/
+*.log
 
 # Database
 *.db
 *.sqlite
+*.sqlite3
+enterprise_ai.db
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
-# Node modules (if any)
+# Project Specific
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
+*.temp
+tmp_extracted.js
+
+# Build Outputs
+out/
+
+# Package Files
+*.zip
+*.tar.gz
+*.rar
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Backup files
+*.bak
+*.backup
+
+# Docker
+.dockerignore
+Dockerfile.old
+docker-compose.override.yml
+
+# Frontend specific
+frontend/coverage/
+frontend/dist/
+
+# MongoDB
+*.bson
+
+# API Keys and Secrets
+secrets/
+private/
+*.pem
+*.key
+*.p12
 
 # Render
 .render.yaml
-
-# Docker
-Dockerfile.old
-docker-compose.override.yml

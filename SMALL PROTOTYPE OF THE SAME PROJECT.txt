@@ -1,0 +1,5 @@
+I have deployed a small prototype just like the project and below is the url to access it :
+https://huggingface.co/spaces/nikkk0914/prompt-ai-assistant
+
+It takes time to start the space if it is been accessed after a long time , so it takes 1-2 mins to restart the space 
+Once the space is running , you can simply access the below prototype but make sure to keep the zoom % to 80 for better ui chat experience

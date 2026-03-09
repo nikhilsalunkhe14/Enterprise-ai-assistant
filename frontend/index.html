@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise AI Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Services in Correct Order -->
+    <script src="js/stateManager.js"></script>
+    <script src="js/uiService.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/websocket.js"></script>
+    <script src="js/voiceInput.js"></script>
+    <script src="js/app-controller.js"></script>
+    
+    <style>
+        /* Custom scrollbar styling */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Animation for typing indicator */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Modal overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        /* Sidebar collapsed state */
+        .sidebar.collapsed {
+            width: 4rem;
+        }
+        .sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 h-screen overflow-hidden">
+    <div id="app" class="flex h-full">
+        <!-- Sidebar -->
+        <div id="sidebar" class="w-64 bg-gray-900 text-white flex flex-col transition-all duration-300">
+            <!-- Sidebar Header -->
+            <div class="p-4 border-b border-gray-700">
+                <button id="newChatBtn" class="w-full flex items-center justify-center px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors mb-3">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    <span class="sidebar-text">New Chat</span>
+                </button>
+                
+                <!-- Search Box -->
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        id="searchBox"
+                        placeholder="Search conversations..." 
+                        class="w-full px-3 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    >
+                    <svg class="absolute right-3 top-2.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Conversation List -->
+            <div id="conversationList" class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-2">
+                <!-- Conversations will be rendered here -->
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="p-4 border-t border-gray-700">
+                <!-- User Info -->
+                <div class="flex items-center mb-3">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                        <span id="userInitial" class="text-white text-sm font-medium">U</span>
+                    </div>
+                    <div class="ml-3 sidebar-text">
+                        <p id="userEmail" class="text-sm text-gray-300">user@example.com</p>
+                        <p id="userName" class="text-xs text-gray-500">User Name</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="space-y-2">
+                    <button id="settingsBtn" class="w-full flex items-center px-3 py-2 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors">
+                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span class="sidebar-text">Settings</span>
+                    </button>
+                    
+                    <button id="logoutBtn" class="w-full flex items-center px-3 py-2 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors">
+                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        <span class="sidebar-text">Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div id="mainContent" class="flex-1 flex flex-col bg-white">
+            <!-- Chat Header -->
+            <div class="border-b border-gray-200 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900">Enterprise AI Assistant</h2>
+                    <div class="flex items-center space-x-4">
+                        <!-- Model Selector -->
+                        <select id="modelSelect" class="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                            <option value="gpt-4">GPT-4</option>
+                            <option value="claude-3">Claude 3</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chatMessages" class="flex-1 overflow-y-auto custom-scrollbar p-6">
+                <!-- Messages will be rendered here -->
+                <div class="flex-1 flex items-center justify-center text-gray-500">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4">💬</div>
+                        <h3 class="text-xl font-semibold mb-2">Welcome to Enterprise AI Assistant</h3>
+                        <p class="text-gray-400">Click "New Chat" to start a conversation</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message Input -->
+            <div class="border-t border-gray-200 px-6 py-4">
+                <form id="messageForm" class="flex items-center space-x-4">
+                    <div class="flex-1 flex items-center space-x-2">
+                        <input 
+                            type="text" 
+                            id="messageInput"
+                            placeholder="Type your message..." 
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            autocomplete="off"
+                        >
+                        <button 
+                            type="button" 
+                            id="voiceBtn"
+                            class="p-2 text-gray-500 hover:text-blue-500 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            title="Voice Input"
+                        >
+                            <svg id="voiceIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <button 
+                        type="submit" 
+                        id="sendBtn"
+                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        Send
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Modal -->
+    <div id="authModal" class="modal-overlay" style="display: none;">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-900 rounded-full mb-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                    </svg>
+                </div>
+                <h1 id="authTitle" class="text-3xl font-bold text-gray-900 mb-2">Sign In</h1>
+                <p id="authSubtitle" class="text-gray-600">Sign in to your account</p>
+            </div>
+
+            <!-- Error Display -->
+            <div id="errorAlert" class="hidden bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6 text-sm">
+                <span id="errorMessage"></span>
+            </div>
+
+            <!-- Success Display -->
+            <div id="successAlert" class="hidden bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6 text-sm">
+                <span id="successMessage"></span>
+            </div>
+
+            <!-- Authentication Form -->
+            <form id="authForm" class="space-y-6">
+                <!-- Name Field (Hidden for login) -->
+                <div id="nameField" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <input 
+                        type="text" 
+                        id="fullName"
+                        name="name"
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                    >
+                </div>
+
+                <!-- Email Field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email"
+                        name="email"
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input 
+                        type="password" 
+                        id="password"
+                        name="password"
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <!-- Submit Button -->
+                <button 
+                    type="submit" 
+                    id="authSubmitBtn"
+                    class="w-full bg-gray-900 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 focus:ring-offset-transparent"
+                >
+                    <span id="submitButtonText">Sign In</span>
+                </button>
+            </form>
+
+            <!-- Toggle Auth Mode -->
+            <div class="text-center mt-6">
+                <button 
+                    type="button" 
+                    id="authToggleBtn"
+                    onclick="toggleAuthMode()"
+                    class="text-gray-600 hover:text-gray-800 text-sm transition-colors"
+                >
+                    <span id="authToggleText">Don't have an account? Sign up</span>
+                </button>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-8 pt-6 border-t border-gray-200">
+                <p class="text-gray-500 text-xs">
+                    Secure authentication powered by MongoDB Atlas
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal-overlay" style="display: none;">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Settings</h2>
+                <button 
+                    type="button" 
+                    id="settingsCloseBtn"
+                    class="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Settings Form -->
+            <div class="space-y-6">
+                <!-- Model Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">AI Model</label>
+                    <select id="modelSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        <option value="gpt-4">GPT-4</option>
+                        <option value="claude-3">Claude 3</option>
+                    </select>
+                </div>
+
+                <!-- Temperature -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Temperature: <span id="temperatureValue">0.7</span>
+                    </label>
+                    <input 
+                        type="range" 
+                        id="temperatureSlider"
+                        min="0" 
+                        max="2" 
+                        step="0.1" 
+                        value="0.7"
+                        class="w-full"
+                    >
+                </div>
+
+                <!-- Max Tokens -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Max Tokens</label>
+                    <input 
+                        type="number" 
+                        id="maxTokensInput"
+                        min="100" 
+                        max="4000" 
+                        value="2000"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="space-y-3 pt-4 border-t border-gray-200">
+                    <button 
+                        type="button" 
+                        id="clearBtn"
+                        class="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+                    >
+                        Clear All Conversations
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Initialization -->
+    <script>
+        // Simple toggle function as fallback
+        function toggleAuthMode() {
+            console.log('🔄 Toggle auth mode called');
+            
+            const isLoginMode = window.appController ? window.appController.isLoginMode : true;
+            const newMode = !isLoginMode;
+            
+            // Update UI elements directly
+            const title = document.getElementById('authTitle');
+            const subtitle = document.getElementById('authSubtitle');
+            const nameField = document.getElementById('nameField');
+            const submitText = document.getElementById('submitButtonText');
+            const toggleText = document.getElementById('authToggleText');
+            
+            console.log('🔍 Elements found:', { title: !!title, subtitle: !!subtitle, nameField: !!nameField, submitText: !!submitText, toggleText: !!toggleText });
+            
+            if (newMode) {
+                if (title) title.textContent = 'Sign In';
+                if (subtitle) subtitle.textContent = 'Sign in to your account';
+                if (nameField) nameField.classList.add('hidden');
+                if (submitText) submitText.textContent = 'Sign In';
+                if (toggleText) toggleText.textContent = "Don't have an account? Sign up";
+            } else {
+                if (title) title.textContent = 'Sign Up';
+                if (subtitle) subtitle.textContent = 'Create your account';
+                if (nameField) nameField.classList.remove('hidden');
+                if (submitText) submitText.textContent = 'Sign Up';
+                if (toggleText) toggleText.textContent = "Already have an account? Sign in";
+            }
+            
+            // Update appController state if available
+            if (window.appController) {
+                window.appController.isLoginMode = newMode;
+                if (window.appController.uiService) {
+                    window.appController.uiService.toggleAuthMode(newMode);
+                }
+            }
+            
+            console.log('✅ Auth mode toggled to:', newMode ? 'Login' : 'Signup');
+        }
+        
+        // Initialize application when DOM is ready
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🚀 DOM Content Loaded - Initializing Enterprise AI Assistant...');
+            
+            try {
+                // Instantiate AppController
+                window.appController = new AppController();
+                console.log('✅ AppController instantiated');
+                
+                // Initialize application
+                await window.appController.init();
+            } catch (error) {
+                console.error('❌ Application initialization failed:', error);
+                alert('Application failed to initialize. Please refresh the page.');
+            }
+        });
+
+        // Global error handler
+        window.addEventListener('error', function(event) {
+            console.error('❌ Global error:', event.error);
+        });
+
+        // Unhandled promise rejection handler
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('❌ Unhandled promise rejection:', event.reason);
+        });
+    </script>
+</body>
+</html>

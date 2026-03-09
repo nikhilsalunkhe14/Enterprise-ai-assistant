@@ -9,8 +9,8 @@ class ConversationCreate(ConversationBase):
     pass
 
 class ConversationResponse(ConversationBase):
-    id: int
-    user_id: int
+    id: str
+    user_id: str
     created_at: datetime
     message_count: Optional[int] = 0
 
@@ -22,11 +22,11 @@ class MessageBase(BaseModel):
     content: str
 
 class MessageCreate(MessageBase):
-    conversation_id: int
+    conversation_id: str
 
 class MessageResponse(MessageBase):
-    id: int
-    conversation_id: int
+    id: str
+    conversation_id: str
     created_at: datetime
 
     class Config:

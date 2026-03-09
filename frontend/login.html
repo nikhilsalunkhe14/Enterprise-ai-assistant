@@ -3,51 +3,413 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Prompt Engineering Agent - Login</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Login - Enterprise AI Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar styling */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Animation for typing indicator */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="login-card">
-            <div class="login-header">
-                <h1>AI Prompt Engineering Agent</h1>
-                <p>IT Project Delivery Guidance System</p>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md mx-4">
+        <!-- Login Container -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8 border border-gray-200">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-900 rounded-full mb-4">
+                    <svg class="w-8 h-8 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Enterprise AI Assistant</h1>
+                <p id="authSubtitle" class="text-gray-600">Sign in to your account</p>
             </div>
-            
-            <form id="loginForm" class="login-form">
-                <div class="form-group">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+
+            <!-- Error Display -->
+            <div id="errorAlert" class="hidden bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6 text-sm">
+                <span id="errorMessage"></span>
+            </div>
+
+            <!-- Success Display -->
+            <div id="successAlert" class="hidden bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-6 text-sm">
+                <span id="successMessage"></span>
+            </div>
+
+            <!-- Authentication Form -->
+            <form id="authForm" onsubmit="handleAuth(event)" class="space-y-6">
+                <!-- Name Field (Hidden for login) -->
+                <div id="nameField" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        name="fullName" 
+                        required 
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="Enter your full name"
+                    >
                 </div>
-                
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required placeholder="Enter your email address">
+
+                <!-- Email Field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                    >
                 </div>
-                
-                <button type="submit" class="btn-primary">Start Session</button>
+
+                <!-- Password Field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        class="w-full px-4 py-3 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <!-- Submit Button -->
+                <button 
+                    type="submit" 
+                    id="authSubmitBtn"
+                    class="w-full bg-gray-900 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 focus:ring-offset-transparent"
+                >
+                    <span id="submitButtonText">Sign In</span>
+                </button>
             </form>
+
+            <!-- Toggle Auth Mode -->
+            <div class="text-center mt-6">
+                <button 
+                    type="button" 
+                    onclick="toggleAuthMode()"
+                    class="text-gray-600 hover:text-gray-800 text-sm transition-colors"
+                >
+                    <span id="authToggleText">Don't have an account? Sign up</span>
+                </button>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-8 pt-6 border-t border-gray-200">
+                <p class="text-gray-500 text-xs">
+                    Secure authentication powered by MongoDB Atlas
+                </p>
+            </div>
         </div>
     </div>
-    
+
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Simple API Service for login page
+        class SimpleApiService {
+            constructor() {
+                this.baseURL = 'http://localhost:8000';
+                this.token = localStorage.getItem('token');
+            }
+
+            setToken(token) {
+                this.token = token;
+                localStorage.setItem('token', token);
+            }
+
+            getHeaders() {
+                const headers = { 'Content-Type': 'application/json' };
+                if (this.token) {
+                    headers['Authorization'] = `Bearer ${this.token}`;
+                }
+                return headers;
+            }
+
+            async request(endpoint, options = {}) {
+                const url = `${this.baseURL}${endpoint}`;
+                const config = { headers: this.getHeaders(), ...options };
+
+                try {
+                    const response = await fetch(url, config);
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.detail || 'Request failed');
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error('API Error:', error);
+                    throw error;
+                }
+            }
+
+            async register(userData) {
+                return this.request('/api/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify(userData)
+                });
+            }
+
+            async login(credentials) {
+                const response = await this.request('/api/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify(credentials)
+                });
+                if (response && response.access_token) {
+                    this.setToken(response.access_token);
+                }
+                return response;
+            }
+
+            async getCurrentUser() {
+                return this.request('/api/auth/me');
+            }
+        }
+
+        // Simple Auth Service
+        class SimpleAuthService {
+            constructor() {
+                this.apiService = new SimpleApiService();
+            }
+
+            async register(userData) {
+                const response = await this.apiService.register(userData);
+                if (response && (response.access_token || response.token || response.id)) {
+                    const token = response.access_token || response.token;
+                    this.apiService.setToken(token);
+                    return response;
+                }
+                throw new Error('Registration failed - Invalid response from server');
+            }
+
+            async login(credentials) {
+                const response = await this.apiService.login(credentials);
+                if (response && (response.access_token || response.token)) {
+                    return response;
+                }
+                throw new Error('Login failed - Invalid response from server');
+            }
+
+            async loadCurrentUser() {
+                try {
+                    const user = await this.apiService.getCurrentUser();
+                    return user;
+                } catch (error) {
+                    localStorage.removeItem('token');
+                    return null;
+                }
+            }
+        }
+
+        // Initialize services
+        const authService = new SimpleAuthService();
+        
+        // Global variables
+        let isLoginMode = true;
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🚀 Initializing Login Page...');
             
-            const fullName = document.getElementById('fullName').value;
-            const email = document.getElementById('email').value;
-            
-            // Generate session_id using email + timestamp
-            const sessionId = email + '_' + Date.now();
-            
-            // Store session data in localStorage
-            localStorage.setItem('session_id', sessionId);
-            localStorage.setItem('user_name', fullName);
-            localStorage.setItem('user_email', email);
-            
-            // Redirect to corporate dashboard
-            window.location.href = 'corporate-dashboard.html';
+            // Check if user is already logged in
+            const existingToken = localStorage.getItem('token');
+            if (existingToken) {
+                console.log('🔑 Found existing token, verifying...');
+                try {
+                    const user = await authService.loadCurrentUser();
+                    if (user) {
+                        console.log('✅ User already authenticated, redirecting...');
+                        window.location.href = 'http://127.0.0.1:5500/frontend/index.html';
+                        return;
+                    } else {
+                        console.log('❌ Invalid token, clearing...');
+                        localStorage.removeItem('token');
+                    }
+                } catch (error) {
+                    console.log('❌ Token verification failed:', error);
+                    localStorage.removeItem('token');
+                }
+            }
+
+            console.log('✅ Login page ready');
         });
+
+        // Toggle between login and signup modes
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            const subtitle = document.getElementById('authSubtitle');
+            const nameField = document.getElementById('nameField');
+            const submitText = document.getElementById('submitButtonText');
+            const toggleText = document.getElementById('authToggleText');
+            const passwordInput = document.getElementById('password');
+
+            // Clear any previous errors
+            clearError();
+            clearSuccess();
+
+            if (isLoginMode) {
+                subtitle.textContent = 'Sign in to your account';
+                nameField.classList.add('hidden');
+                submitText.textContent = 'Sign In';
+                toggleText.textContent = "Don't have an account? Sign up";
+                passwordInput.setAttribute('autocomplete', 'current-password');
+            } else {
+                subtitle.textContent = 'Create your account';
+                nameField.classList.remove('hidden');
+                submitText.textContent = 'Sign Up';
+                toggleText.textContent = 'Already have an account? Sign in';
+                passwordInput.setAttribute('autocomplete', 'new-password');
+            }
+        }
+
+        // Handle authentication (login/signup)
+        async function handleAuth(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const fullName = document.getElementById('fullName').value.trim();
+
+            console.log('🔍 Debug - Form data:', { email, password: '***', fullName, isLoginMode });
+
+            // Clear previous messages
+            clearError();
+            clearSuccess();
+
+            // Basic validation
+            if (!email || !password) {
+                showError('Please fill in all required fields');
+                return;
+            }
+
+            if (!isLoginMode && !fullName) {
+                showError('Please enter your full name');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('Password must be at least 6 characters long');
+                return;
+            }
+
+            const submitButton = document.getElementById('authSubmitBtn');
+            const originalText = submitButton.textContent;
+            
+            try {
+                // Show loading state
+                submitButton.disabled = true;
+                submitButton.innerHTML = `
+                    <svg class="animate-spin h-5 w-5 mr-2 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                `;
+
+                const userData = { email, password };
+                if (!isLoginMode) {
+                    userData.name = fullName;
+                }
+
+                console.log('🔍 Debug - Sending to auth service:', { isLoginMode, userData });
+
+                let response;
+                if (isLoginMode) {
+                    console.log('🔑 Attempting login...');
+                    response = await authService.login(userData);
+                } else {
+                    console.log('📝 Attempting registration...');
+                    response = await authService.register(userData);
+                }
+
+                console.log('🔍 Debug - Auth response:', response);
+
+                // Show success message
+                showSuccess(isLoginMode ? 'Login successful! Redirecting...' : 'Registration successful! Redirecting...');
+                
+                // Store token if response has one
+                if (response && (response.access_token || response.token)) {
+                    const token = response.access_token || response.token;
+                    console.log('🔍 Debug - Storing token:', token.substring(0, 20) + '...');
+                    localStorage.setItem('token', token);
+                }
+                
+                // Redirect to main app after a short delay
+                setTimeout(() => {
+                    window.location.href = 'http://127.0.0.1:5500/frontend/index.html';
+                }, 1500);
+
+            } catch (error) {
+                console.error('❌ Authentication error:', error);
+                showError(error.message || (isLoginMode ? 'Login failed' : 'Registration failed'));
+            } finally {
+                // Reset button state
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorAlert = document.getElementById('errorAlert');
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorAlert.classList.remove('hidden');
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                errorAlert.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Clear error message
+        function clearError() {
+            const errorAlert = document.getElementById('errorAlert');
+            errorAlert.classList.add('hidden');
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successAlert = document.getElementById('successAlert');
+            const successMessage = document.getElementById('successMessage');
+            successMessage.textContent = message;
+            successAlert.classList.remove('hidden');
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                successAlert.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Clear success message
+        function clearSuccess() {
+            const successAlert = document.getElementById('successAlert');
+            successAlert.classList.add('hidden');
+        }
     </script>
 </body>
 </html>

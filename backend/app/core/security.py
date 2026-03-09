@@ -33,8 +33,8 @@ class InputValidator:
         if len(sanitized) > 2000:
             raise ValueError("Input too long (max 2000 characters)")
         
-        if len(sanitized.strip()) < 3:
-            raise ValueError("Input too short (min 3 characters)")
+        if len(sanitized.strip()) < 1:
+            raise ValueError("Input cannot be empty")
         
         return sanitized.strip()
     
@@ -44,9 +44,8 @@ class InputValidator:
         if not session_id:
             return False
         
-        # Basic email_timestamp format validation
-        pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}_\d{13}$'
-        return bool(re.match(pattern, session_id))
+        # Allow any non-empty session ID (relaxed validation)
+        return len(session_id.strip()) > 0
     
     @staticmethod
     def validate_query_params(params: Dict[str, Any]) -> Dict[str, Any]:

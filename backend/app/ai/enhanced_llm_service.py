@@ -36,7 +36,15 @@ class CircuitBreaker:
 
 class EnhancedLLMService:
     def __init__(self):
-        self.client = Groq(api_key=settings.GROQ_API_KEY)
+        api_key = settings.GROQ_API_KEY
+        print(f"🔍 DEBUG: GROQ_API_KEY loaded: {'SET' if api_key else 'NOT SET'}")
+        print(f"🔍 DEBUG: API key length: {len(api_key) if api_key else 0}")
+        
+        if not api_key:
+            print("🚨 CRITICAL: GROQ_API_KEY is not set! LLM calls will fail.")
+            raise Exception("GROQ_API_KEY not configured")
+            
+        self.client = Groq(api_key=api_key)
         self.model = "llama-3.1-8b-instant"
         self.circuit_breaker = CircuitBreaker()
         self.timeout = 30.0
@@ -49,6 +57,9 @@ class EnhancedLLMService:
     async def generate_response_with_retry(self, system_prompt: str, user_prompt: str) -> str:
         """Generate LLM response with retry and circuit breaker"""
         logger.info(f"Generating LLM response with model: {self.model}")
+        print(f"🔍 DEBUG: LLM model: {self.model}")
+        print(f"🔍 DEBUG: System prompt: {system_prompt[:50]}...")
+        print(f"🔍 DEBUG: User prompt: {user_prompt[:50]}...")
         
         try:
             completion = await asyncio.wait_for(
@@ -68,7 +79,17 @@ class EnhancedLLMService:
             
             response = completion.choices[0].message.content
             logger.info("LLM response generated successfully")
-            return response
+            print(f"🔍 DEBUG: Raw LLM response: {response[:100]}...")
+            
+            # Extract token usage
+            token_usage = {
+                "prompt_tokens": completion.usage.prompt_tokens if completion.usage else 0,
+                "completion_tokens": completion.usage.completion_tokens if completion.usage else 0,
+                "total_tokens": completion.usage.total_tokens if completion.usage else 0
+            }
+            print(f"🔍 DEBUG: Token usage: {token_usage}")
+            
+            return response, token_usage
             
         except asyncio.TimeoutError:
             logger.error("LLM request timed out")
@@ -77,13 +98,19 @@ class EnhancedLLMService:
             logger.error(f"LLM API error: {str(e)}")
             raise e
     
-    async def generate_response(self, system_prompt: str, user_prompt: str) -> str:
+    async def generate_response(self, system_prompt: str, user_prompt: str) -> tuple:
         """Main response method with fallback"""
+        print(f"🔍 DEBUG: generate_response() called")
+        print(f"🔍 DEBUG: System prompt: {system_prompt[:50]}...")
+        print(f"🔍 DEBUG: User prompt: {user_prompt[:50]}...")
+        
         try:
             return await self.generate_response_with_retry(system_prompt, user_prompt)
         except Exception as e:
+            print(f"🔍 DEBUG: LLM call failed: {type(e).__name__}: {str(e)}")
             logger.error(f"LLM service failed: {str(e)}")
-            return self._get_fallback_response(system_prompt, user_prompt)
+            fallback_response = self._get_fallback_response(system_prompt, user_prompt)
+            return fallback_response, {"total_tokens": 0}
     
     def _get_fallback_response(self, system_prompt: str, user_prompt: str) -> str:
         """Fallback response when LLM is unavailable"""

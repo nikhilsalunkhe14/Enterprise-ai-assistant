@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import ChatInterface from './components/ChatInterface';
 
 // API Configuration
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -109,7 +110,7 @@ export const AuthProvider = ({ children }) => {
 
 // Protected Route Component
 export const ProtectedRoute = ({ children }) => {
-  const { token, loading } = useAuth();
+  const { token, loading, logout } = useAuth();
 
   if (loading) {
     return (
@@ -123,7 +124,7 @@ export const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" />;
   }
 
-  return children;
+  return React.cloneElement(children, { token, logout });
 };
 
 // Login Component
@@ -149,9 +150,6 @@ export const Login = () => {
           setError(result.error);
         }
       } else {
-        // Registration successful, user is logged in
-      }
-    } else {
         const result = await login(email, password);
         if (!result.success) {
           setError(result.error);
@@ -275,19 +273,7 @@ export const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/" element={
               <ProtectedRoute>
-                <div className="min-h-screen">
-                  {/* Your main chat interface will go here */}
-                  <div className="flex items-center justify-center">
-                    <div className="text-center">
-                      <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                        Enterprise AI Assistant
-                      </h1>
-                      <p className="text-lg text-gray-600 mb-8">
-                        Authentication successful! Chat interface loading...
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <ChatInterface />
               </ProtectedRoute>
             } />
           </Routes>
